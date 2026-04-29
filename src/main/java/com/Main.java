@@ -1,26 +1,23 @@
 package com;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.Scanner;
 
 public class Main {
     static Scanner myScanner = new Scanner(System.in);
     static String userSelection;
-    public static final String TRANSACTION_FILE_NAME = "src/main/resources/Transaction.csv";
-    static ArrayList<ledgerScreen> transactionFile = loadTransaction(TRANSACTION_FILE_NAME);
+    public static final String TRANSACTION_FILE_NAME = "src/main/resources/PrevTransaction.csv";
+    static ArrayList<Transaction> transactionFile = loadTransaction(TRANSACTION_FILE_NAME);
 
     public static void main(String[] args) {
         mainMenu();
-        for (ledgerScreen e : transactionFile) {
-            System.out.println(e);
+        for (Transaction e : transactionFile) {
+            System.out.println(e.getTime());
         }
     }
 
@@ -56,9 +53,9 @@ public class Main {
         } while (running);
     }
 
-    private static ArrayList<ledgerScreen> loadTransaction(String filePath) {
+    private static ArrayList<Transaction> loadTransaction(String filePath) {
 
-        ArrayList<ledgerScreen> transaction = new ArrayList<ledgerScreen>();
+        ArrayList<Transaction> transaction = new ArrayList<Transaction>();
         try (
                 FileReader reader = new FileReader(filePath);
                 BufferedReader buffer = new BufferedReader(reader);
@@ -74,7 +71,7 @@ public class Main {
                 String storeVendor = splitLine[3];
                 double storeAmount = Double.parseDouble(splitLine[4]);
 
-                transaction.add(new ledgerScreen(storeDate, storeTime, storeDescription, storeVendor, storeAmount));
+                transaction.add(new Transaction(storeDate, storeTime, storeDescription, storeVendor, storeAmount));
             }
 
         } catch (
@@ -95,22 +92,43 @@ public class Main {
     }
 
     private static void addDeposit() {
-
-        System.out.println("Please enter the information for your Deposit transaction: ");
-
-        System.out.println("Please enter the date: ");
-        userSelection = myScanner.nextLine();
-        LocalDate date = LocalDate.parse(userSelection);
-        System.out.println("Please enter the time of transaction: ");
-        LocalTime time = LocalTime.parse(myScanner.nextLine());
-        System.out.println("please enter the description of the transaction: ");
-        String description = myScanner.nextLine();
-        System.out.println("Please enter the vendor name: ");
-        String vendor = myScanner.nextLine();
-        System.out.println("Please enter the amount: ");
-        double amount = Double.parseDouble(myScanner.nextLine());
-        ledgerScreen transactions = new ledgerScreen(date, time, description, vendor, amount);
-        transactionFile.add(transactions);
+        ArrayList<Transaction> transactions = getTransaction();
+        transactionFile.addAll(transactions);
     }
 
+    private static ArrayList<Transaction> getTransaction() {
+        ArrayList<Transaction> transaction = new ArrayList<>();
+        boolean running = true;
+        do {
+            System.out.println("\n Please enter the information for your Deposit transaction: ");
+
+            System.out.println("Please enter the date (yyyy-MM-dd): ");
+            userSelection = myScanner.nextLine();
+            LocalDate date = LocalDate.parse(userSelection);
+
+            System.out.println("Please enter the time of transaction (HH:MM:SS");
+            LocalTime time = LocalTime.parse(myScanner.nextLine());
+
+            System.out.println("please enter the description of the transaction: ");
+            String description = myScanner.nextLine();
+
+            System.out.println("Please enter the vendor name: ");
+            String vendor = myScanner.nextLine();
+
+            System.out.println("Please enter the amount: ");
+            double amount = Double.parseDouble(myScanner.nextLine());
+
+            transaction.add(new Transaction(date, time, description, vendor, amount));
+
+            String confrimation = ("Would you like to add another transaction: Yes or No?");
+            System.out.println(confrimation);
+
+            String userInput = myScanner.nextLine();
+            if (userInput.equalsIgnoreCase("no")) {
+                running = false;
+            }
+        } while (running);
+        return transaction;
+    }
 }
+

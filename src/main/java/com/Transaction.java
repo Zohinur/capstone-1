@@ -2,16 +2,15 @@ package com;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 
-public class ledgerScreen {
+public class Transaction {
  public LocalDate date;
  public LocalTime time;
  public String description;
  public String vendor;
  public double amount;
 
-    public ledgerScreen(LocalDate date, LocalTime time, String description, String vendor, double amount) {
+    public Transaction(LocalDate date, LocalTime time, String description, String vendor, double amount) {
         this.amount = amount;
         this.vendor = vendor;
         this.description = description;
