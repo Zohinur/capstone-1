@@ -59,4 +59,8 @@ public class ledgerScreen {
         this.date = date;
     }
 
+    public String toString() {
+        return date + "|" + time + "|" + description + "|" + vendor + "|" + amount;
+    }
+
 }

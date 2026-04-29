@@ -19,6 +19,9 @@ public class Main {
 
     public static void main(String[] args) {
         mainMenu();
+for( ledgerScreen e: transactionFile) {
+    System.out.println(e);
+}
     }
 
     private static void mainMenu() {
@@ -91,17 +94,23 @@ public class Main {
 
     }
 
-    private static ArrayList<ledgerScreen> addDeposit() {
-        ArrayList<LocalDate> addDate = new ArrayList<LocalDate>();
+    private static void addDeposit() {
 
         System.out.println("Please enter the information for your Deposit transaction: ");
 
         System.out.println("Please enter the date: ");
         userSelection = myScanner.nextLine();
         LocalDate date = LocalDate.parse(userSelection);
-        addDate.add(date);
-
-        return transactionFile.setDate(date);
+        System.out.println("Please enter the time of transaction: ");
+        LocalTime time = LocalTime.parse(myScanner.nextLine());
+        System.out.println("please enter the description of the transaction: ");
+        String description = myScanner.nextLine();
+        System.out.println("Please enter the vendor name: ");
+        String vendor = myScanner.nextLine();
+        System.out.println("Please enter the amount: ");
+        double amount = Double.parseDouble(myScanner.nextLine());
+        ledgerScreen transactions = new ledgerScreen(date, time, description, vendor, amount);
+        transactionFile.add(transactions);
     }
 
 }
