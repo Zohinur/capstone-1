@@ -1,11 +1,9 @@
 package com;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -20,14 +18,16 @@ public class Main {
     }
 
     private static void display(Transaction e) {
-        System.out.println(e.getDate()+"|"+e.getTime()+"|"+e.getDescription());
+        System.out.println(e.getDate() + "|" + e.getTime() + "|" + e.getDescription());
     }
-    public static void displayAll(ArrayList<Transaction> transactions){
+
+    public static void displayAll(ArrayList<Transaction> transactions) {
         System.out.println("header");
         for (Transaction e : transactions) {
             display(e);
         }
     }
+
     private static void mainMenu() {
         boolean running = true;
 
@@ -37,7 +37,8 @@ public class Main {
                     D. Add Deposit
                     P. Make Payment
                     L. Ledger Screen
-                    X. Exit This Application""");
+                    X. Exit This Application
+                    input:""");
             System.out.println(prompt);
             userSelection = myScanner.nextLine();
             switch (userSelection) {
@@ -87,37 +88,49 @@ public class Main {
         }
         return transaction;
     }
+private static void writeTransaction( ArrayList<Transaction> transactions){
+        try(FileWriter write = new FileWriter(TRANSACTION_FILE_NAME, true);
+            BufferedWriter buffWrite = new BufferedWriter(write);
+        ) {
+            for(Transaction e: transactions){
+                buffWrite.write(e.getDate() + "|" + e.getTime() + "|" + e.getDescription() + "|" + e.getVendor() + "|" + e.getAmount());
+            }buffWrite.newLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+}
 
     private static void ledgerScreen() {
-    boolean running = true;
-    do{
-        System.out.println("Welcome to the ledger Screen! ");
-        String prompt = """
-                what would you like to do?
-                A) display all entries
-                D) display all entries with deposit
-                P) Display all entries with payment
-                bR) Run a custom search
-                H) Return Home""";
-        String userSelection = myScanner.nextLine();
+        boolean running = true;
+        do {
+            System.out.println("Welcome to the ledger Screen! ");
+            String prompt = """
+                    what would you like to do?
+                    A) display all entries
+                    D) display all entries with deposit
+                    P) Display all entries with payment
+                    bR) Run a custom search
+                    H) Return Home""";
+            System.out.println(prompt);
+            String userSelection = myScanner.nextLine();
 
-        switch (userSelection){
-            case ("A"):
-                displayEntries();
-                break;
-            case("D"):
-                displayDeposit();
-                break;
-            case("P"):
-                displayPayment();
-                break;
-            case("R"):
-                reports();
-                break;
-            case("H"):
-                running = false;
-        }
-    } while(running);
+            switch (userSelection) {
+                case ("A"):
+                    displayEntries();
+                    break;
+                case ("D"):
+                    displayDeposit();
+                    break;
+                case ("P"):
+                    displayPayment();
+                    break;
+                case ("R"):
+                    reports();
+                    break;
+                case ("H"):
+                    running = false;
+            }
+        } while (running);
 
     }
 
@@ -150,13 +163,22 @@ public class Main {
                 case "5":
                     byVendor();
                     break;
-                case"0":
-                    running=false;
+                case "0":
+                    running = false;
             }
-        }while(running);
+        } while (running);
     }
 
     private static void byVendor() {
+        System.out.println("Enter the Vendor name: ");
+        String userSelection = myScanner.nextLine();
+       for(Transaction e: transactionFile)
+        if(Objects.equals(userSelection,e.getVendor())) {
+            System.out.println("Here is the search of the vendor: " + e.getVendor());
+           // writeTransaction(e);
+        }
+
+
     }
 
     private static void prevYear() {
@@ -184,17 +206,17 @@ public class Main {
 
     private static void makePayment() {
         ArrayList<Transaction> transactions = getTransaction();
-
-        for(Transaction e : transactions) {
-            e.setAmount((e.getAmount()*-1));
-
+        for (Transaction e : transactions) {
+            e.setAmount((e.getAmount() * -1));
         }
-transactionFile.addAll(transactions);
+        transactionFile.addAll(transactions);
+        writeTransaction(transactions);
     }
 
     private static void addDeposit() {
         ArrayList<Transaction> transactions = getTransaction();
         transactionFile.addAll(transactions);
+        writeTransaction( transactions);
     }
 
     private static ArrayList<Transaction> getTransaction() {
