@@ -97,7 +97,7 @@ public class Main {
                 A) display all entries
                 D) display all entries with deposit
                 P) Display all entries with payment
-                R) Run a custom search
+                bR) Run a custom search
                 H) Return Home""";
         String userSelection = myScanner.nextLine();
 
