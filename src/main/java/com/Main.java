@@ -3,7 +3,6 @@ package com;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -90,17 +89,96 @@ public class Main {
     }
 
     private static void ledgerScreen() {
-//    boolean running = true;
-//    do{
-//        System.out.println("Welcome to the ledger Screen! ");
-//        String prompt = """
-//                what would you like to do?
-//                A) display all entries
-//                D) display all entries with deposit
-//                P) Display all entries with payment
-//                R) Report """;
-//    }
+    boolean running = true;
+    do{
+        System.out.println("Welcome to the ledger Screen! ");
+        String prompt = """
+                what would you like to do?
+                A) display all entries
+                D) display all entries with deposit
+                P) Display all entries with payment
+                R) Run a custom search
+                H) Return Home""";
+        String userSelection = myScanner.nextLine();
 
+        switch (userSelection){
+            case ("A"):
+                displayEntries();
+                break;
+            case("D"):
+                displayDeposit();
+                break;
+            case("P"):
+                displayPayment();
+                break;
+            case("R"):
+                reports();
+                break;
+            case("H"):
+                running = false;
+        }
+    } while(running);
+
+    }
+
+    private static void reports() {
+        boolean running = true;
+        do {
+            String prompt = """
+                    How would you like to search?
+                    1. Month to date
+                    2. Previous Month
+                    3. Year to date
+                    4. Previous year
+                    5. Search by vendor
+                    0. Return to Ledger Screen""";
+            System.out.println(prompt);
+            String userSelection = myScanner.nextLine();
+            switch (userSelection) {
+                case "1":
+                    monthDate();
+                    break;
+                case "2":
+                    prevMonth();
+                    break;
+                case "3":
+                    yearToDate();
+                    break;
+                case "4":
+                    prevYear();
+                    break;
+                case "5":
+                    byVendor();
+                    break;
+                case"0":
+                    running=false;
+            }
+        }while(running);
+    }
+
+    private static void byVendor() {
+    }
+
+    private static void prevYear() {
+    }
+
+    private static void yearToDate() {
+    }
+
+    private static void prevMonth() {
+    }
+
+    private static void monthDate() {
+    }
+
+
+    private static void displayPayment() {
+    }
+
+    private static void displayDeposit() {
+    }
+
+    private static void displayEntries() {
     }
 
 
@@ -129,7 +207,7 @@ transactionFile.addAll(transactions);
             userSelection = myScanner.nextLine();
             LocalDate date = LocalDate.parse(userSelection);
 
-            System.out.println("Please enter the time of transaction (HH:MM:SS");
+            System.out.println("Please enter the time of transaction (HH:mm:ss): ");
             LocalTime time = LocalTime.parse(myScanner.nextLine());
 
             System.out.println("please enter the description of the transaction: ");
