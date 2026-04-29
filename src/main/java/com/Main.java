@@ -15,7 +15,6 @@ public class Main {
     static Scanner myScanner = new Scanner(System.in);
     static String userSelection;
     public static final String TRANSACTION_FILE_NAME = "src/main/resources/Transaction.csv";
-
     static ArrayList<ledgerScreen> transactionFile = loadTransaction(TRANSACTION_FILE_NAME);
 
     public static void main(String[] args) {
@@ -64,7 +63,6 @@ public class Main {
             buffer.readLine();
             String currentLine;
             while ((currentLine = buffer.readLine()) != null) {
-                System.out.println("Here is the line" + currentLine);
 
                 String[] splitLine = currentLine.split("\\|");
                 LocalDate storeDate = LocalDate.parse(splitLine[0]);
@@ -94,14 +92,16 @@ public class Main {
     }
 
     private static ArrayList<ledgerScreen> addDeposit() {
-        ArrayList<ledgerScreen> addDate = new ArrayList<ledgerScreen>();
+        ArrayList<LocalDate> addDate = new ArrayList<LocalDate>();
 
         System.out.println("Please enter the information for your Deposit transaction: ");
 
         System.out.println("Please enter the date: ");
         userSelection = myScanner.nextLine();
-        DateFormat dateFormat = userSelection;
+        LocalDate date = LocalDate.parse(userSelection);
+        addDate.add(date);
 
+        return transactionFile.setDate(date);
     }
 
 }
