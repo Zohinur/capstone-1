@@ -19,9 +19,9 @@ public class Main {
 
     public static void main(String[] args) {
         mainMenu();
-for( ledgerScreen e: transactionFile) {
-    System.out.println(e);
-}
+        for (ledgerScreen e : transactionFile) {
+            System.out.println(e);
+        }
     }
 
     private static void mainMenu() {
