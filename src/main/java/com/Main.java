@@ -1,4 +1,5 @@
 package com;
+
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -88,17 +89,19 @@ public class Main {
         }
         return transaction;
     }
-private static void writeTransaction( ArrayList<Transaction> transactions){
-        try(FileWriter write = new FileWriter(TRANSACTION_FILE_NAME, true);
-            BufferedWriter buffWrite = new BufferedWriter(write);
+
+    private static void writeTransaction(ArrayList<Transaction> transactions) {
+        try (FileWriter write = new FileWriter(TRANSACTION_FILE_NAME, true);
+             BufferedWriter buffWrite = new BufferedWriter(write);
         ) {
-            for(Transaction e: transactions){
+            for (Transaction e : transactions) {
                 buffWrite.write(e.getDate() + "|" + e.getTime() + "|" + e.getDescription() + "|" + e.getVendor() + "|" + e.getAmount());
-            }buffWrite.newLine();
+            }
+            buffWrite.newLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-}
+    }
 
     private static void ledgerScreen() {
         boolean running = true;
@@ -170,18 +173,23 @@ private static void writeTransaction( ArrayList<Transaction> transactions){
     }
 
     private static void byVendor() {
-        System.out.println("Enter the Vendor name: ");
-        String userSelection = myScanner.nextLine();
-       for(Transaction e: transactionFile)
-        if(Objects.equals(userSelection,e.getVendor())) {
-            System.out.println("Here is the search of the vendor: " + e.getVendor());
-           // writeTransaction(e);
-        }
 
+        System.out.println("Enter the Vendor name: ");
+        //ArrayList<Transaction> vendorTrans = new ArrayList<Transaction>();
+        String userSelection = myScanner.nextLine();
+        for (Transaction e : transactionFile) {
+            if (Objects.equals(userSelection, e.vendor)) {
+               // vendorTrans.add(e);
+                System.out.println(e);
+            }
+            //writeTransaction(vendorTrans);
+        }
 
     }
 
     private static void prevYear() {
+
+
     }
 
     private static void yearToDate() {
@@ -216,7 +224,7 @@ private static void writeTransaction( ArrayList<Transaction> transactions){
     private static void addDeposit() {
         ArrayList<Transaction> transactions = getTransaction();
         transactionFile.addAll(transactions);
-        writeTransaction( transactions);
+        writeTransaction(transactions);
     }
 
     private static ArrayList<Transaction> getTransaction() {
