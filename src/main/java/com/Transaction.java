@@ -4,11 +4,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Transaction {
- public LocalDate date;
- public LocalTime time;
- public String description;
- public String vendor;
- public double amount;
+    public LocalDate date;
+    private LocalTime time;
+    public String description;
+    public String vendor;
+    public double amount;
 
     public Transaction(LocalDate date, LocalTime time, String description, String vendor, double amount) {
         this.amount = amount;

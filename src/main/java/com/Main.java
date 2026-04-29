@@ -3,6 +3,7 @@ package com;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -16,11 +17,18 @@ public class Main {
 
     public static void main(String[] args) {
         mainMenu();
-        for (Transaction e : transactionFile) {
-            System.out.println(e.getTime());
-        }
+        displayAll(transactionFile);
     }
 
+    private static void display(Transaction e) {
+        System.out.println(e.getDate()+"|"+e.getTime()+"|"+e.getDescription());
+    }
+    public static void displayAll(ArrayList<Transaction> transactions){
+        System.out.println("header");
+        for (Transaction e : transactions) {
+            display(e);
+        }
+    }
     private static void mainMenu() {
         boolean running = true;
 
@@ -82,13 +90,28 @@ public class Main {
     }
 
     private static void ledgerScreen() {
-
+//    boolean running = true;
+//    do{
+//        System.out.println("Welcome to the ledger Screen! ");
+//        String prompt = """
+//                what would you like to do?
+//                A) display all entries
+//                D) display all entries with deposit
+//                P) Display all entries with payment
+//                R) Report """;
+//    }
 
     }
 
 
     private static void makePayment() {
+        ArrayList<Transaction> transactions = getTransaction();
 
+        for(Transaction e : transactions) {
+            e.setAmount((e.getAmount()*-1));
+
+        }
+transactionFile.addAll(transactions);
     }
 
     private static void addDeposit() {
