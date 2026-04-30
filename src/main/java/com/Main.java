@@ -198,12 +198,12 @@ public class Main {
     }
 
     private static void yearToDate() {
-////        System.out.println("Transaction from Year to Date");
-////        for(Transaction e: transactionFile) {
-////            if(e.getDate().getYear()==2026){
-////                System.out.println(e);
-//            }
-//        }
+        System.out.println("Transaction from Year to Date");
+        for(Transaction e: transactionFile) {
+            if(e.getDate().getYear()==2026){
+                System.out.println(e);
+            }
+        }
     }
 
     private static void prevMonth() {
