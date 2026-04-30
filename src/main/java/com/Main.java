@@ -188,14 +188,26 @@ public class Main {
     }
 
     private static void prevYear() {
-
+        System.out.println("Here is the transaction from previous year: ");
+        for(Transaction e: transactionFile) {
+                if(e.getDate().getYear() == 2025){
+                    System.out.println(e);
+                }
+        }
 
     }
 
     private static void yearToDate() {
+////        System.out.println("Transaction from Year to Date");
+////        for(Transaction e: transactionFile) {
+////            if(e.getDate().getYear()==2026){
+////                System.out.println(e);
+//            }
+//        }
     }
 
     private static void prevMonth() {
+        System.out.println("Transaction from previous Month ");
     }
 
     private static void monthDate() {
