@@ -20,11 +20,11 @@ public class Main {
     }
 
     private static void display(Transaction e) {
-        System.out.println(e.getDate() + "|" + e.getTime() + "|" + e.getDescription());
+        System.out.println(e.getDate() + "|" + e.getTime() + "|" + e.getDescription()+ "|" + e.getVendor() + "|" + e.getAmount());
     }
 
     public static void displayAll(ArrayList<Transaction> transactions) {
-        System.out.println("header");
+        System.out.println("date|time|description|vendor|amount");
         for (Transaction e : transactions) {
             display(e);
         }
@@ -107,6 +107,7 @@ public class Main {
     private static void ledgerScreen() {
         boolean running = true;
         do {
+            System.out.println();
             System.out.println("Welcome to the ledger Screen! ");
             String prompt = """
                     what would you like to do?
@@ -142,6 +143,7 @@ public class Main {
     private static void reports() {
         boolean running = true;
         do {
+            System.out.println();
             String prompt = """
                     How would you like to search?
                     1. Month to date
@@ -176,6 +178,7 @@ public class Main {
     }
 
     private static void byVendor() {
+        System.out.println();
         System.out.println("Enter the Vendor name: ");
         String userSelection = myScanner.nextLine();
         for (Transaction e : allTransactions) {
@@ -185,8 +188,11 @@ public class Main {
         }
 
     }
-
+//Created method to get transaction from previous year using Localdate now to get Date for now storing it in "today"
+    //Created another variable called "lastYear" to get the today's year then subtract by 1
+    //Then Looped through all the objects in alltransactions and printing out objects that only equal to "lastYear
     private static void prevYear() {
+        System.out.println();
         System.out.println("Here is the transaction from previous year: ");
         LocalDate today = LocalDate.now();
         int lastYear = today.getYear() - 1;
@@ -204,7 +210,7 @@ public class Main {
         int thisYear = year.getYear();
         for (Transaction e : allTransactions) {
             if (e.getDate().getYear() == thisYear) {
-                System.out.println(e);
+                display(e);
             }
         }
     }
@@ -246,20 +252,28 @@ public class Main {
 
 
     private static void displayPayment() {
+        System.out.println();
+        System.out.println("Payment Transaction only:");
+        for (Transaction e: allTransactions) {
+            if(e.getAmount() <= 0) {
+                display(e);
+            }
+        }
     }
-
+//Looped through all the objects in "allTransaction"
+    //Using if condition I only printed out amount that were greater than 0
     private static void displayDeposit() {
-//     int negative = -1;
-//        for(Transaction e: allTransactions) {
-//         if (e != negative){
-//
-//         }
-//     }
+        System.out.println("Deposits Transaction only: ");
+        for (Transaction e : allTransactions) {
+            if (e.getAmount() >= 0) {
+                display(e);
+            }
+        }
     }
 
     private static void displayEntries() {
-      allTransactions.sort(Comparator.comparing(Transaction::getDate).reversed());
-       displayAll(allTransactions);
+        allTransactions.sort(Comparator.comparing(Transaction::getDate).reversed());
+        displayAll(allTransactions);
     }
 
     private static void makePayment() {
@@ -281,7 +295,7 @@ public class Main {
         ArrayList<Transaction> transaction = new ArrayList<>();
         boolean running = true;
         do {
-            System.out.println("\n Please enter the information for your Deposit transaction: ");
+            System.out.println("\n Please enter the information for your transaction: ");
 
             System.out.println("Please enter the date (yyyy-MM-dd): ");
             userSelection = myScanner.nextLine();
@@ -300,10 +314,11 @@ public class Main {
             double amount = Double.parseDouble(myScanner.nextLine());
 
             transaction.add(new Transaction(date, time, description, vendor, amount));
-
+            System.out.println("Your transaction has been recorded!!!");
+            System.out.println();
             String confrimation = ("Would you like to add another transaction: Yes or No?");
             System.out.println(confrimation);
-
+            System.out.println();
             String userInput = myScanner.nextLine();
             if (userInput.equalsIgnoreCase("no")) {
                 running = false;
