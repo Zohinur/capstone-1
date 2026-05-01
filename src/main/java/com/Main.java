@@ -276,7 +276,7 @@ public class Main {
 
     private static ArrayList<Transaction> filterByDescription(ArrayList<Transaction> transactions) {
         ArrayList<Transaction> results = new ArrayList<>();
-        System.out.println("Enter the Description: ");
+        System.out.print("Enter the Description: ");
         String userInput = myScanner.nextLine();
 
         for(Transaction e: transactions){
