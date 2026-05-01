@@ -258,8 +258,8 @@ public class Main {
     }
 
     private static void displayEntries() {
-//      allTransactions.sort(Comparator.comparing(Transaction::getDate));
-//       displayAll(allTransactions);
+      allTransactions.sort(Comparator.comparing(Transaction::getDate).reversed());
+       displayAll(allTransactions);
     }
 
     private static void makePayment() {
