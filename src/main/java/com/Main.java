@@ -16,21 +16,25 @@ public class Main {
     static ArrayList<Transaction> allTransactions = loadTransaction(TRANSACTION_FILE_NAME);
 
     public static void main(String[] args) {
+        //The Main Menu for the project of where it all starts
         mainMenu();
-        displayAll(allTransactions);
     }
 
+    //Display method to print out the object in the format from csv file
     private static void display(Transaction e) {
         System.out.println(e.getDate() + "|" + e.getTime() + "|" + e.getDescription() + "|" + e.getVendor() + "|" + e.getAmount());
     }
 
+    //displayAll method is to display the whole object itself
     public static void displayAll(ArrayList<Transaction> transactions) {
         System.out.println("date|time|description|vendor|amount");
+        //This loops through all the objects and displays them 1 by 1.
         for (Transaction e : transactions) {
             display(e);
         }
     }
 
+    //This is mainMenu method where the users can select what they want to do.
     private static void mainMenu() {
         boolean running = true;
 
@@ -55,7 +59,14 @@ public class Main {
                     ledgerScreen();
                     break;
                 case "X":
-                    System.out.println("We're sad to see you go\uD83D\uDE15");
+                    //Added an emoji and ASCII text
+                    System.out.println("We're sad to see you go\uD83D\uDE15" +
+                            " ____  _     _    _____ _____ _  _      _____   ____  ____  _      _           \n" +
+                            "/ ___\\/ \\ /|/ \\ /Y__ __Y__ __Y \\/ \\  /|/  __/  /  _ \\/  _ \\/ \\  /|/ \\  /|      \n" +
+                            "|    \\| |_||| | || / \\   / \\ | || |\\ ||| |  _  | | \\|| / \\|| |  ||| |\\ ||      \n" +
+                            "\\___ || | ||| \\_/| | |   | | | || | \\||| |_//  | |_/|| \\_/|| |/\\||| | \\||______\n" +
+                            "\\____/\\_/ \\|\\____/ \\_/   \\_/ \\_/\\_/  \\|\\____\\  \\____/\\____/\\_/  \\|\\_/  \\|\\/\\/\\/\n" +
+                            "                                                                               ");
                     running = false;
                     break;
                 default:
@@ -64,6 +75,7 @@ public class Main {
         } while (running);
     }
 
+    //This methods reads the CSV file and creates the object but also parsing it as well
     private static ArrayList<Transaction> loadTransaction(String filePath) {
 
         ArrayList<Transaction> transaction = new ArrayList<Transaction>();
@@ -75,6 +87,7 @@ public class Main {
             String currentLine;
             while ((currentLine = buffer.readLine()) != null) {
 
+                //parsing the objects into parts of arrays
                 String[] splitLine = currentLine.split("\\|");
                 LocalDate storeDate = LocalDate.parse(splitLine[0]);
                 LocalTime storeTime = LocalTime.parse(splitLine[1]);
@@ -82,6 +95,7 @@ public class Main {
                 String storeVendor = splitLine[3];
                 double storeAmount = Double.parseDouble(splitLine[4]);
 
+                //Using the constructor from the Transaction class to store the data
                 transaction.add(new Transaction(storeDate, storeTime, storeDescription, storeVendor, storeAmount));
             }
 
@@ -181,7 +195,7 @@ public class Main {
             }
         } while (running);
     }
-
+//This method has the ability to search the transaction based of the vendor name
     private static void byVendor() {
         System.out.println();
         System.out.println("Enter the Vendor name: ");
@@ -237,79 +251,6 @@ public class Main {
         }
     }
 
-    public static void customFilter() {
-        ArrayList<Transaction> results = filterByDate(allTransactions);
-        results = filterByDescription(results);
-        results = filterByVendor(results);
-        results = filterByAmount(results);
-        displayAll(results);
-
-    }
-
-    private static ArrayList<Transaction> filterByVendor(ArrayList<Transaction> transactions) {
-        ArrayList<Transaction> results = new ArrayList<>();
-        System.out.print("Enter the vendor name: ");
-        String userInput = myScanner.nextLine();
-
-        for (Transaction e : transactions) {
-            if (userInput.isEmpty() || e.getVendor().equalsIgnoreCase(userInput)) {
-                results.add(e);
-            }
-        }
-        return results;
-    }
-
-    private static ArrayList<Transaction> filterByAmount(ArrayList<Transaction> transactions) {
-        ArrayList<Transaction> results = new ArrayList<Transaction>();
-        System.out.println("Enter the amount: ");
-        String userInput = myScanner.nextLine();
-        //This condition checks if its true or false
-        Double amount = userInput.isEmpty() ? null : Double.parseDouble(userInput);
-
-        for (Transaction e : transactions) {
-            if (amount == null || e.getAmount() == amount) {
-                results.add(e);
-            }
-        }
-        return results;
-    }
-
-    private static ArrayList<Transaction> filterByDescription(ArrayList<Transaction> transactions) {
-        ArrayList<Transaction> results = new ArrayList<>();
-        System.out.print("Enter the Description: ");
-        String userInput = myScanner.nextLine();
-
-        for(Transaction e: transactions){
-            if(userInput.isEmpty() || e.getDescription().equalsIgnoreCase(userInput)){
-                results.add(e);
-            }
-        }
-        return results;
-    }
-
-    private static ArrayList<Transaction> filterByDate(ArrayList<Transaction> transactions) {
-        System.out.print("Enter your start date: ");
-        String userInput = myScanner.nextLine();
-        //this uses the condition and if its true its null and if its true then it parses the userInput
-        LocalDate startDate = userInput.isEmpty() ? null : LocalDate.parse(userInput);
-        System.out.print("Enter your end date: ");
-        String userInput1 = myScanner.nextLine();
-        LocalDate endDate = userInput1.isEmpty() ? null : LocalDate.parse(userInput1);
-
-        ArrayList<Transaction> results = new ArrayList<>();
-
-        for (Transaction t : transactions) {
-                //This checks if start and end date is null, if so it will skip the program
-            //Checks if the start date is equal or after to get the transactions from those dates
-            // The end date is before so the user can have the range of the transactions
-            if ((startDate == null || t.getDate().isEqual(startDate) || t.getDate().isAfter(startDate))
-                    && (endDate == null || t.getDate().isEqual(endDate) || t.getDate().isBefore(endDate))) {
-                results.add(t);
-            }
-        }
-        return results;
-    }
-
     //Initialized variable "now" to gets today's date using LocalDate.now
     //Created another variable "todayNow" with the data type of Month to get month of "now"
     //Looped through all the objects and used if to print out transaction of the month
@@ -355,6 +296,81 @@ public class Main {
         allTransactions.sort(Comparator.comparing(Transaction::getDate).reversed());
         displayAll(allTransactions);
     }
+
+    //Filtering features
+    public static void customFilter() {
+        ArrayList<Transaction> results = filterByDate(allTransactions);
+        results = filterByDescription(results);
+        results = filterByVendor(results);
+        results = filterByAmount(results);
+        displayAll(results);
+
+    }
+
+    private static ArrayList<Transaction> filterByVendor(ArrayList<Transaction> transactions) {
+        ArrayList<Transaction> results = new ArrayList<>();
+        System.out.print("Enter the vendor name: ");
+        String userInput = myScanner.nextLine();
+
+        for (Transaction e : transactions) {
+            if (userInput.isEmpty() || e.getVendor().equalsIgnoreCase(userInput)) {
+                results.add(e);
+            }
+        }
+        return results;
+    }
+
+    private static ArrayList<Transaction> filterByAmount(ArrayList<Transaction> transactions) {
+        ArrayList<Transaction> results = new ArrayList<Transaction>();
+        System.out.println("Enter the amount: ");
+        String userInput = myScanner.nextLine();
+        //This condition checks if its true or false
+        Double amount = userInput.isEmpty() ? null : Double.parseDouble(userInput);
+
+        for (Transaction e : transactions) {
+            if (amount == null || e.getAmount() == amount) {
+                results.add(e);
+            }
+        }
+        return results;
+    }
+
+    private static ArrayList<Transaction> filterByDescription(ArrayList<Transaction> transactions) {
+        ArrayList<Transaction> results = new ArrayList<>();
+        System.out.print("Enter the Description: ");
+        String userInput = myScanner.nextLine();
+
+        for (Transaction e : transactions) {
+            if (userInput.isEmpty() || e.getDescription().equalsIgnoreCase(userInput)) {
+                results.add(e);
+            }
+        }
+        return results;
+    }
+
+    private static ArrayList<Transaction> filterByDate(ArrayList<Transaction> transactions) {
+        System.out.print("Enter your start date: ");
+        String userInput = myScanner.nextLine();
+        //this uses the condition and if its true its null and if its true then it parses the userInput
+        LocalDate startDate = userInput.isEmpty() ? null : LocalDate.parse(userInput);
+        System.out.print("Enter your end date: ");
+        String userInput1 = myScanner.nextLine();
+        LocalDate endDate = userInput1.isEmpty() ? null : LocalDate.parse(userInput1);
+
+        ArrayList<Transaction> results = new ArrayList<>();
+
+        for (Transaction t : transactions) {
+            //This checks if start and end date is null, if so it will skip the program
+            //Checks if the start date is equal or after to get the transactions from those dates
+            // The end date is before so the user can have the range of the transactions
+            if ((startDate == null || t.getDate().isEqual(startDate) || t.getDate().isAfter(startDate))
+                    && (endDate == null || t.getDate().isEqual(endDate) || t.getDate().isBefore(endDate))) {
+                results.add(t);
+            }
+        }
+        return results;
+    }
+
 
     private static void makePayment() {
         ArrayList<Transaction> transactions = getTransaction();
