@@ -13,6 +13,7 @@ public class Main {
     static Scanner myScanner = new Scanner(System.in);
     static String userSelection;
     public static final String TRANSACTION_FILE_NAME = "src/main/resources/transactions.csv";
+    //The Arraylist that holds all the object from the file while also adding new transaction such as deposit and payment
     static ArrayList<Transaction> allTransactions = loadTransaction(TRANSACTION_FILE_NAME);
 
     public static void main(String[] args) {
@@ -75,7 +76,7 @@ public class Main {
         } while (running);
     }
 
-    //This methods reads the CSV file and creates the object but also parsing it as well
+    //Methods reads the CSV file and creates the object but also parsing it as well
     private static ArrayList<Transaction> loadTransaction(String filePath) {
 
         ArrayList<Transaction> transaction = new ArrayList<Transaction>();
@@ -105,7 +106,7 @@ public class Main {
         }
         return transaction;
     }
-
+//Writes the transaction to the CSV file while appending
     private static void writeTransaction(ArrayList<Transaction> transactions) {
         try (FileWriter write = new FileWriter(TRANSACTION_FILE_NAME, true);
              BufferedWriter buffWrite = new BufferedWriter(write)
@@ -118,7 +119,7 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
-
+//The ledger Screen
     private static void ledgerScreen() {
         boolean running = true;
         do {
@@ -154,7 +155,7 @@ public class Main {
         } while (running);
 
     }
-
+//The report page
     private static void reports() {
         boolean running = true;
         do {
@@ -195,7 +196,8 @@ public class Main {
             }
         } while (running);
     }
-//This method has the ability to search the transaction based of the vendor name
+
+    //This method has the ability to search the transaction based of the vendor name
     private static void byVendor() {
         System.out.println();
         System.out.println("Enter the Vendor name: ");
@@ -299,10 +301,16 @@ public class Main {
 
     //Filtering features
     public static void customFilter() {
+        //Creates an array of object and storing all transaction based on the filterByDate method
         ArrayList<Transaction> results = filterByDate(allTransactions);
+        //This narrows down result after filterting by date
         results = filterByDescription(results);
+        //Narrows down the result if the user filter by description
         results = filterByVendor(results);
+        //Narrows down the result if the user filter by amount vendor
         results = filterByAmount(results);
+        //Narrows down the results if user filter by amount
+        //returns all the transaction remaining
         displayAll(results);
 
     }
@@ -324,7 +332,8 @@ public class Main {
         ArrayList<Transaction> results = new ArrayList<Transaction>();
         System.out.println("Enter the amount: ");
         String userInput = myScanner.nextLine();
-        //This condition checks if its true or false
+        //This condition checks if its true or false and is able to parse
+        //Used wrapper class to be able to make null if the user input is empty
         Double amount = userInput.isEmpty() ? null : Double.parseDouble(userInput);
 
         for (Transaction e : transactions) {
@@ -339,7 +348,7 @@ public class Main {
         ArrayList<Transaction> results = new ArrayList<>();
         System.out.print("Enter the Description: ");
         String userInput = myScanner.nextLine();
-
+        //Goes through each of the objects and will narrow down transactions that equals to user input
         for (Transaction e : transactions) {
             if (userInput.isEmpty() || e.getDescription().equalsIgnoreCase(userInput)) {
                 results.add(e);
@@ -371,10 +380,11 @@ public class Main {
         return results;
     }
 
-
     private static void makePayment() {
+        //Creating an Arraylist datatype and storing the date from getTransaction method
         ArrayList<Transaction> transactions = getTransaction();
         for (Transaction e : transactions) {
+            //Takes tha object and multiplying by -1 to make it a negative number
             e.setAmount((e.getAmount() * -1));
         }
         allTransactions.addAll(transactions);
@@ -382,19 +392,26 @@ public class Main {
     }
 
     private static void addDeposit() {
+        //Gets the data from the user using getTransaction method
         ArrayList<Transaction> transactions = getTransaction();
+        //adds it to allTransaction
         allTransactions.addAll(transactions);
+        //Able to write it to the CSV file
         writeTransaction(transactions);
     }
 
+    //The Main method that takes data from user
     private static ArrayList<Transaction> getTransaction() {
+        //Created an object of Arraylist
         ArrayList<Transaction> transaction = new ArrayList<>();
+        //Using do while loop to ask user if they want to do another transaction
         boolean running = true;
         do {
             System.out.println("\n Please enter the information for your transaction: ");
 
             System.out.println("Please enter the date (yyyy-MM-dd): ");
             userSelection = myScanner.nextLine();
+            //Using Localdate to parse the String into a date
             LocalDate date = LocalDate.parse(userSelection);
 
             System.out.println("Please enter the time of transaction (HH:mm:ss): ");
@@ -417,6 +434,7 @@ public class Main {
             System.out.println();
             String userInput = myScanner.nextLine();
             if (userInput.equalsIgnoreCase("no")) {
+                //If the user enters no then it will get out the loop
                 running = false;
             }
         } while (running);
