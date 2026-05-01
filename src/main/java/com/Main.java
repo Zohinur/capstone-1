@@ -173,7 +173,7 @@ public class Main {
                 case "5":
                     byVendor();
                     break;
-                case"6":
+                case "6":
                     customFilter();
                     break;
                 case "0":
@@ -252,9 +252,9 @@ public class Main {
         System.out.print("Enter the vendor name: ");
         String userInput = myScanner.nextLine();
 
-        for (Transaction e: transactions) {
-            if( userInput.isEmpty() || e.getVendor().equalsIgnoreCase(userInput)) {
-                    results.add(e);
+        for (Transaction e : transactions) {
+            if (userInput.isEmpty() || e.getVendor().equalsIgnoreCase(userInput)) {
+                results.add(e);
             }
         }
         return results;
@@ -263,41 +263,51 @@ public class Main {
     private static ArrayList<Transaction> filterByAmount(ArrayList<Transaction> transactions) {
         ArrayList<Transaction> results = new ArrayList<Transaction>();
         System.out.println("Enter the amount: ");
-        String userInput =  myScanner.nextLine();
+        String userInput = myScanner.nextLine();
         //This condition checks if its true or false
         Double amount = userInput.isEmpty() ? null : Double.parseDouble(userInput);
 
-
-        for(Transaction e: transactions) {
-            if(amount ==null || e.getAmount() == amount) {
+        for (Transaction e : transactions) {
+            if (amount == null || e.getAmount() == amount) {
                 results.add(e);
             }
         }
-return results;
+        return results;
     }
 
     private static ArrayList<Transaction> filterByDescription(ArrayList<Transaction> transactions) {
+        ArrayList<Transaction> results = new ArrayList<>();
+        System.out.println("Enter the Description: ");
+        String userInput = myScanner.nextLine();
+
+        for(Transaction e: transactions){
+            if(userInput.isEmpty() || e.getDescription().equalsIgnoreCase(userInput)){
+                results.add(e);
+            }
+        }
+        return results;
     }
 
     private static ArrayList<Transaction> filterByDate(ArrayList<Transaction> transactions) {
         System.out.print("Enter your start date: ");
         String userInput = myScanner.nextLine();
         //this uses the condition and if its true its null and if its true then it parses the userInput
-        LocalDate startDate = userInput.isEmpty()?null:LocalDate.parse(userInput);
+        LocalDate startDate = userInput.isEmpty() ? null : LocalDate.parse(userInput);
         System.out.print("Enter your end date: ");
         String userInput1 = myScanner.nextLine();
-        LocalDate endDate = userInput1.isEmpty()?null:LocalDate.parse(userInput1);
+        LocalDate endDate = userInput1.isEmpty() ? null : LocalDate.parse(userInput1);
 
         ArrayList<Transaction> results = new ArrayList<>();
 
         for (Transaction t : transactions) {
-
-            if ((startDate == null || t.getDate().isEqual(startDate)  || t.getDate().isAfter(startDate))
+                //This checks if start and end date is null, if so it will skip the program
+            //Checks if the start date is equal or after to get the transactions from those dates
+            // The end date is before so the user can have the range of the transactions
+            if ((startDate == null || t.getDate().isEqual(startDate) || t.getDate().isAfter(startDate))
                     && (endDate == null || t.getDate().isEqual(endDate) || t.getDate().isBefore(endDate))) {
                 results.add(t);
             }
-
-            }
+        }
         return results;
     }
 
