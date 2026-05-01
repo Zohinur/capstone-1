@@ -40,7 +40,7 @@ public class Main {
 
         do {
             String prompt = ("""
-                     Home Screen
+                     🏠 Home Screen Options
                     D. Add Deposit
                     P. Make Payment
                     L. Ledger Screen
@@ -123,7 +123,7 @@ public class Main {
         boolean running = true;
         do {
             System.out.println();
-            System.out.println("Welcome to the ledger Screen! ");
+            System.out.println("\uD83D\uDCD2 Welcome to the ledger Screen! ");
             String prompt = """
                     what would you like to do?
                     A) display all entries
