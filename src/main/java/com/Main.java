@@ -237,14 +237,13 @@ public class Main {
         }
     }
 
-    public static ArrayList<Transaction> customFilter() {
+    public static void customFilter() {
         ArrayList<Transaction> results = filterByDate(allTransactions);
         results = filterByDescription(results);
         results = filterByVendor(results);
         results = filterByAmount(results);
+        displayAll(results);
 
-
-        return results;
     }
 
     private static ArrayList<Transaction> filterByVendor(ArrayList<Transaction> transactions) {
