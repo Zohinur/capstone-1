@@ -250,12 +250,13 @@ public class Main {
     private static void monthDate() {
     }
 
-
+//Looped through all the objects from "allTransaction"
+    //If condition to check if amount is less than 0 to display all transaction that are - which displays all the payment
     private static void displayPayment() {
         System.out.println();
         System.out.println("Payment Transaction only:");
         for (Transaction e: allTransactions) {
-            if(e.getAmount() <= 0) {
+            if(e.getAmount() < 0) {
                 display(e);
             }
         }
