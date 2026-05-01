@@ -215,17 +215,20 @@ public class Main {
             }
         }
     }
-
+//Got today's day date first using LocalDate
+    //initialized variable preMonth to subract  -1 to get previous month
+    //if statement to print out last month transactions
     private static void prevMonth() {
         System.out.println("Transaction from previous Month ");
-        // todo: watch out for january
+        //January works!
         LocalDate today = LocalDate.now();
-//        int preMonth = today.getMonth() - 1;
-//        for (Transaction e : allTransactions) {
-//            if(e.getDate().minusMonths(1)) {
-//
-//            }
-//        }
+        //found getMonthValue from the error
+        int preMonth = today.getMonthValue()-1 ;
+        for (Transaction e : allTransactions) {
+            if(e.getDate().getMonthValue() == preMonth) {
+                    display(e);
+            }
+        }
     }
 
     public static ArrayList<Transaction> customFilter() {
