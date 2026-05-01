@@ -260,10 +260,21 @@ public class Main {
         return results;
     }
 
-//    private static ArrayList<Transaction> filterByAmount(ArrayList<Transaction> transactions) {
-//        System.out.println("Enter the amount: ");
-//
-//    }
+    private static ArrayList<Transaction> filterByAmount(ArrayList<Transaction> transactions) {
+        ArrayList<Transaction> results = new ArrayList<Transaction>();
+        System.out.println("Enter the amount: ");
+        String userInput =  myScanner.nextLine();
+        //This condition checks if its true or false
+        Double amount = userInput.isEmpty() ? null : Double.parseDouble(userInput);
+
+
+        for(Transaction e: transactions) {
+            if(amount ==null || e.getAmount() == amount) {
+                results.add(e);
+            }
+        }
+return results;
+    }
 
     private static ArrayList<Transaction> filterByDescription(ArrayList<Transaction> transactions) {
     }
