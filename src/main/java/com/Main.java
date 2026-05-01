@@ -4,18 +4,19 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
     static Scanner myScanner = new Scanner(System.in);
     static String userSelection;
-    public static final String TRANSACTION_FILE_NAME = "src/main/resources/PrevTransaction.csv";
-    static ArrayList<Transaction> transactionFile = loadTransaction(TRANSACTION_FILE_NAME);
+    public static final String TRANSACTION_FILE_NAME = "src/main/resources/transactions.csv";
+    static ArrayList<Transaction> allTransactions = loadTransaction(TRANSACTION_FILE_NAME);
 
     public static void main(String[] args) {
         mainMenu();
-        displayAll(transactionFile);
+        displayAll(allTransactions);
     }
 
     private static void display(Transaction e) {
@@ -40,7 +41,7 @@ public class Main {
                     L. Ledger Screen
                     X. Exit This Application
                     input:""");
-            System.out.println(prompt);
+            System.out.print(prompt);
             userSelection = myScanner.nextLine();
             switch (userSelection) {
                 case "D":
@@ -112,9 +113,10 @@ public class Main {
                     A) display all entries
                     D) display all entries with deposit
                     P) Display all entries with payment
-                    bR) Run a custom search
-                    H) Return Home""";
-            System.out.println(prompt);
+                    R) Run a custom search
+                    H) Return Home
+                    User Input:""";
+            System.out.print(prompt);
             String userSelection = myScanner.nextLine();
 
             switch (userSelection) {
@@ -147,7 +149,8 @@ public class Main {
                     3. Year to date
                     4. Previous year
                     5. Search by vendor
-                    0. Return to Ledger Screen""";
+                    0. Return to Ledger Screen
+                    User Input:""";
             System.out.println(prompt);
             String userSelection = myScanner.nextLine();
             switch (userSelection) {
@@ -173,34 +176,34 @@ public class Main {
     }
 
     private static void byVendor() {
-
         System.out.println("Enter the Vendor name: ");
-        //ArrayList<Transaction> vendorTrans = new ArrayList<Transaction>();
         String userSelection = myScanner.nextLine();
-        for (Transaction e : transactionFile) {
+        for (Transaction e : allTransactions) {
             if (Objects.equals(userSelection, e.vendor)) {
-               // vendorTrans.add(e);
                 System.out.println(e);
             }
-            //writeTransaction(vendorTrans);
         }
 
     }
 
     private static void prevYear() {
         System.out.println("Here is the transaction from previous year: ");
-        for(Transaction e: transactionFile) {
-                if(e.getDate().getYear() == 2025){
-                    System.out.println(e);
-                }
+        LocalDate today = LocalDate.now();
+        int lastYear = today.getYear() - 1;
+        for (Transaction e : allTransactions) {
+            if (e.getDate().getYear() == lastYear) {
+                System.out.println(e);
+            }
         }
 
     }
 
     private static void yearToDate() {
         System.out.println("Transaction from Year to Date");
-        for(Transaction e: transactionFile) {
-            if(e.getDate().getYear()==2026){
+        LocalDate year = LocalDate.now();
+        int thisYear = year.getYear();
+        for (Transaction e : allTransactions) {
+            if (e.getDate().getYear() == thisYear) {
                 System.out.println(e);
             }
         }
@@ -208,7 +211,35 @@ public class Main {
 
     private static void prevMonth() {
         System.out.println("Transaction from previous Month ");
+        // todo: watch out for january
+        for (Transaction e : allTransactions) {
+//            if(e.getDate().minusMonths(1)) {
+//
+//            }
+        }
     }
+
+    public static ArrayList<Transaction> customFilter() {
+        ArrayList<Transaction> results = filterByDate(allTransactions);
+//        results = filterByDescription(results);
+//        results = filterByAmount(results);
+
+        return results;
+    }
+
+    private static ArrayList<Transaction> filterByDate(ArrayList<Transaction> transactions) {
+        System.out.println("en");
+        LocalDate startDate = LocalDate.now();
+        ArrayList<Transaction> results = new ArrayList<>();
+
+        for (Transaction t : transactions) {
+            if (t.getDate().isAfter(startDate)) {
+                results.add(t);
+            }
+        }
+        return results;
+    }
+
 
     private static void monthDate() {
     }
@@ -218,24 +249,31 @@ public class Main {
     }
 
     private static void displayDeposit() {
+//     int negative = -1;
+//        for(Transaction e: allTransactions) {
+//         if (e != negative){
+//
+//         }
+//     }
     }
 
     private static void displayEntries() {
+//      allTransactions.sort(Comparator.comparing(Transaction::getDate));
+//       displayAll(allTransactions);
     }
-
 
     private static void makePayment() {
         ArrayList<Transaction> transactions = getTransaction();
         for (Transaction e : transactions) {
             e.setAmount((e.getAmount() * -1));
         }
-        transactionFile.addAll(transactions);
+        allTransactions.addAll(transactions);
         writeTransaction(transactions);
     }
 
     private static void addDeposit() {
         ArrayList<Transaction> transactions = getTransaction();
-        transactionFile.addAll(transactions);
+        allTransactions.addAll(transactions);
         writeTransaction(transactions);
     }
 

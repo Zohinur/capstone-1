@@ -58,8 +58,12 @@ public class Transaction {
         this.date = date;
     }
 
-    public String toString() {
-        return date + "|" + time + "|" + description + "|" + vendor + "|" + amount;
-    }
+//    public String toString() {
+//     return  date + "|" +
+//             time + "|" +
+//             description + "|" +
+//             vendor + "|" +
+//             amount;
+//    }
 
 }
