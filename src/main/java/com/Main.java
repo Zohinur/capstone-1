@@ -3,6 +3,7 @@ package com;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
@@ -157,7 +158,7 @@ public class Main {
             String userSelection = myScanner.nextLine();
             switch (userSelection) {
                 case "1":
-                    monthDate();
+                    monthToDate();
                     break;
                 case "2":
                     prevMonth();
@@ -193,7 +194,7 @@ public class Main {
     //Then Looped through all the objects in alltransactions and printing out objects that only equal to "lastYear
     private static void prevYear() {
         System.out.println();
-        System.out.println("Here is the transaction from previous year: ");
+        System.out.println("Transactions from previous year: ");
         LocalDate today = LocalDate.now();
         int lastYear = today.getYear() - 1;
         for (Transaction e : allTransactions) {
@@ -218,11 +219,13 @@ public class Main {
     private static void prevMonth() {
         System.out.println("Transaction from previous Month ");
         // todo: watch out for january
-        for (Transaction e : allTransactions) {
+        LocalDate today = LocalDate.now();
+//        int preMonth = today.getMonth() - 1;
+//        for (Transaction e : allTransactions) {
 //            if(e.getDate().minusMonths(1)) {
 //
 //            }
-        }
+//        }
     }
 
     public static ArrayList<Transaction> customFilter() {
@@ -247,7 +250,17 @@ public class Main {
     }
 
 
-    private static void monthDate() {
+    private static void monthToDate() {
+        System.out.println("Transaction from month to date: ");
+        LocalDate now = LocalDate.now();
+        //gave me error saying I need data type of Month then initiated to import the class
+        Month todayNow = now.getMonth();
+for( Transaction e: allTransactions) {
+    if(e.getDate().getMonth() == todayNow) {
+        display(e);
+    }
+}
+
     }
 
 //Looped through all the objects from "allTransaction"
