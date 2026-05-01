@@ -239,25 +239,31 @@ public class Main {
 
     public static ArrayList<Transaction> customFilter() {
         ArrayList<Transaction> results = filterByDate(allTransactions);
-        results = filterByDescription(allTransactions);
-        results = filterByVendor(allTransactions);
-        results = filterByAmount(allTransactions);
+        results = filterByDescription(results);
+        results = filterByVendor(results);
+        results = filterByAmount(results);
 
 
         return results;
     }
 
-//    private static ArrayList<Transaction> filterByVendor(ArrayList<Transaction> transactions) {
-//        ArrayList<Transaction> results = new ArrayList<>();
-//        System.out.print("Enter the vendor name: ");
-//        String userInput = myScanner.nextLine();
-//
-//
+    private static ArrayList<Transaction> filterByVendor(ArrayList<Transaction> transactions) {
+        ArrayList<Transaction> results = new ArrayList<>();
+        System.out.print("Enter the vendor name: ");
+        String userInput = myScanner.nextLine();
+
+        for (Transaction e: transactions) {
+            if( userInput.isEmpty() || e.getVendor().equalsIgnoreCase(userInput)) {
+                    results.add(e);
+            }
+        }
+        return results;
+    }
+
+//    private static ArrayList<Transaction> filterByAmount(ArrayList<Transaction> transactions) {
+//        System.out.println("Enter the amount: ");
 //
 //    }
-
-    private static ArrayList<Transaction> filterByAmount(ArrayList<Transaction> transactions) {
-    }
 
     private static ArrayList<Transaction> filterByDescription(ArrayList<Transaction> transactions) {
     }
@@ -282,41 +288,6 @@ public class Main {
 
             }
         return results;
-    }
-    private static ArrayList<Transaction> getCustomerFilter() {
-        ArrayList<Transaction> transaction = new ArrayList<>();
-        boolean running = true;
-        do {
-            System.out.println("\n Please enter the properties you would like to filter: ");
-
-            System.out.println("Please enter the date (yyyy-MM-dd): ");
-            userSelection = myScanner.nextLine();
-            LocalDate date = LocalDate.parse(userSelection);
-
-            System.out.println("Please enter the time of transaction (HH:mm:ss): ");
-            LocalTime time = LocalTime.parse(myScanner.nextLine());
-
-            System.out.println("please enter the description of the transaction: ");
-            String description = myScanner.nextLine();
-
-            System.out.println("Please enter the vendor name: ");
-            String vendor = myScanner.nextLine();
-
-            System.out.println("Please enter the amount: ");
-            double amount = Double.parseDouble(myScanner.nextLine());
-
-            transaction.add(new Transaction(date, time, description, vendor, amount));
-            System.out.println("Your transaction has been recorded!!!");
-            System.out.println();
-            String confrimation = ("Would you like to add another transaction: Yes or No?");
-            System.out.println(confrimation);
-            System.out.println();
-            String userInput = myScanner.nextLine();
-            if (userInput.equalsIgnoreCase("no")) {
-                running = false;
-            }
-        } while (running);
-        return transaction;
     }
 
     //Initialized variable "now" to gets today's date using LocalDate.now
