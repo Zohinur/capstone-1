@@ -21,7 +21,7 @@ public class Main {
     }
 
     private static void display(Transaction e) {
-        System.out.println(e.getDate() + "|" + e.getTime() + "|" + e.getDescription()+ "|" + e.getVendor() + "|" + e.getAmount());
+        System.out.println(e.getDate() + "|" + e.getTime() + "|" + e.getDescription() + "|" + e.getVendor() + "|" + e.getAmount());
     }
 
     public static void displayAll(ArrayList<Transaction> transactions) {
@@ -69,7 +69,7 @@ public class Main {
         ArrayList<Transaction> transaction = new ArrayList<Transaction>();
         try (
                 FileReader reader = new FileReader(filePath);
-                BufferedReader buffer = new BufferedReader(reader);
+                BufferedReader buffer = new BufferedReader(reader)
         ) {
             buffer.readLine();
             String currentLine;
@@ -94,7 +94,7 @@ public class Main {
 
     private static void writeTransaction(ArrayList<Transaction> transactions) {
         try (FileWriter write = new FileWriter(TRANSACTION_FILE_NAME, true);
-             BufferedWriter buffWrite = new BufferedWriter(write);
+             BufferedWriter buffWrite = new BufferedWriter(write)
         ) {
             for (Transaction e : transactions) {
                 buffWrite.write(e.getDate() + "|" + e.getTime() + "|" + e.getDescription() + "|" + e.getVendor() + "|" + e.getAmount());
@@ -152,6 +152,7 @@ public class Main {
                     3. Year to date
                     4. Previous year
                     5. Search by vendor
+                    6. Custom filter
                     0. Return to Ledger Screen
                     User Input:""";
             System.out.println(prompt);
@@ -172,6 +173,9 @@ public class Main {
                 case "5":
                     byVendor();
                     break;
+                case"6":
+                    customFilter();
+                    break;
                 case "0":
                     running = false;
             }
@@ -189,7 +193,8 @@ public class Main {
         }
 
     }
-//Created method to get transaction from previous year using Localdate now to get Date for now storing it in "today"
+
+    //Created method to get transaction from previous year using Localdate now to get Date for now storing it in "today"
     //Created another variable called "lastYear" to get the today's year then subtract by 1
     //Then Looped through all the objects in alltransactions and printing out objects that only equal to "lastYear
     private static void prevYear() {
@@ -215,7 +220,8 @@ public class Main {
             }
         }
     }
-//Got today's day date first using LocalDate
+
+    //Got today's day date first using LocalDate
     //initialized variable preMonth to subract  -1 to get previous month
     //if statement to print out last month transactions
     private static void prevMonth() {
@@ -223,61 +229,125 @@ public class Main {
         //January works!
         LocalDate today = LocalDate.now();
         //found getMonthValue from the error
-        int preMonth = today.getMonthValue()-1 ;
+        int preMonth = today.getMonthValue() - 1;
         for (Transaction e : allTransactions) {
-            if(e.getDate().getMonthValue() == preMonth) {
-                    display(e);
+            if (e.getDate().getMonthValue() == preMonth) {
+                display(e);
             }
         }
     }
 
     public static ArrayList<Transaction> customFilter() {
         ArrayList<Transaction> results = filterByDate(allTransactions);
-//        results = filterByDescription(results);
-//        results = filterByAmount(results);
+        results = filterByDescription(allTransactions);
+        results = filterByVendor(allTransactions);
+        results = filterByAmount(allTransactions);
+
 
         return results;
+    }
+
+//    private static ArrayList<Transaction> filterByVendor(ArrayList<Transaction> transactions) {
+//        ArrayList<Transaction> results = new ArrayList<>();
+//        System.out.print("Enter the vendor name: ");
+//        String userInput = myScanner.nextLine();
+//
+//
+//
+//    }
+
+    private static ArrayList<Transaction> filterByAmount(ArrayList<Transaction> transactions) {
+    }
+
+    private static ArrayList<Transaction> filterByDescription(ArrayList<Transaction> transactions) {
     }
 
     private static ArrayList<Transaction> filterByDate(ArrayList<Transaction> transactions) {
-        System.out.println("en");
-        LocalDate startDate = LocalDate.now();
+        System.out.print("Enter your start date: ");
+        String userInput = myScanner.nextLine();
+        //this uses the condition and if its true its null and if its true then it parses the userInput
+        LocalDate startDate = userInput.isEmpty()?null:LocalDate.parse(userInput);
+        System.out.print("Enter your end date: ");
+        String userInput1 = myScanner.nextLine();
+        LocalDate endDate = userInput1.isEmpty()?null:LocalDate.parse(userInput1);
+
         ArrayList<Transaction> results = new ArrayList<>();
 
         for (Transaction t : transactions) {
-            if (t.getDate().isAfter(startDate)) {
+
+            if ((startDate == null || t.getDate().isEqual(startDate)  || t.getDate().isAfter(startDate))
+                    && (endDate == null || t.getDate().isEqual(endDate) || t.getDate().isBefore(endDate))) {
                 results.add(t);
             }
-        }
+
+            }
         return results;
     }
+    private static ArrayList<Transaction> getCustomerFilter() {
+        ArrayList<Transaction> transaction = new ArrayList<>();
+        boolean running = true;
+        do {
+            System.out.println("\n Please enter the properties you would like to filter: ");
 
+            System.out.println("Please enter the date (yyyy-MM-dd): ");
+            userSelection = myScanner.nextLine();
+            LocalDate date = LocalDate.parse(userSelection);
 
+            System.out.println("Please enter the time of transaction (HH:mm:ss): ");
+            LocalTime time = LocalTime.parse(myScanner.nextLine());
+
+            System.out.println("please enter the description of the transaction: ");
+            String description = myScanner.nextLine();
+
+            System.out.println("Please enter the vendor name: ");
+            String vendor = myScanner.nextLine();
+
+            System.out.println("Please enter the amount: ");
+            double amount = Double.parseDouble(myScanner.nextLine());
+
+            transaction.add(new Transaction(date, time, description, vendor, amount));
+            System.out.println("Your transaction has been recorded!!!");
+            System.out.println();
+            String confrimation = ("Would you like to add another transaction: Yes or No?");
+            System.out.println(confrimation);
+            System.out.println();
+            String userInput = myScanner.nextLine();
+            if (userInput.equalsIgnoreCase("no")) {
+                running = false;
+            }
+        } while (running);
+        return transaction;
+    }
+
+    //Initialized variable "now" to gets today's date using LocalDate.now
+    //Created another variable "todayNow" with the data type of Month to get month of "now"
+    //Looped through all the objects and used if to print out transaction of the month
     private static void monthToDate() {
         System.out.println("Transaction from month to date: ");
         LocalDate now = LocalDate.now();
         //gave me error saying I need data type of Month then initiated to import the class
         Month todayNow = now.getMonth();
-for( Transaction e: allTransactions) {
-    if(e.getDate().getMonth() == todayNow) {
-        display(e);
-    }
-}
+        for (Transaction e : allTransactions) {
+            if (e.getDate().getMonth() == todayNow) {
+                display(e);
+            }
+        }
 
     }
 
-//Looped through all the objects from "allTransaction"
+    //Looped through all the objects from "allTransaction"
     //If condition to check if amount is less than 0 to display all transaction that are - which displays all the payment
     private static void displayPayment() {
         System.out.println();
         System.out.println("Payment Transaction only:");
-        for (Transaction e: allTransactions) {
-            if(e.getAmount() < 0) {
+        for (Transaction e : allTransactions) {
+            if (e.getAmount() < 0) {
                 display(e);
             }
         }
     }
-//Looped through all the objects in "allTransaction"
+
+    //Looped through all the objects in "allTransaction"
     //Using if condition I only printed out amount that were greater than 0
     private static void displayDeposit() {
         System.out.println("Deposits Transaction only: ");
@@ -289,6 +359,8 @@ for( Transaction e: allTransactions) {
     }
 
     private static void displayEntries() {
+        //sorted out all the objects from earliest to latest using Comparator class and comparing method from that class
+        //Using reversed method I was able to print out eh earliest transaction first
         allTransactions.sort(Comparator.comparing(Transaction::getDate).reversed());
         displayAll(allTransactions);
     }
